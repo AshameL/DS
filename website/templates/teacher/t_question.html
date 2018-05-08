@@ -1,0 +1,160 @@
+{% extends 'teacher/t_base.html' %}
+{% load staticfiles %}
+{% block title %}试题管理{% endblock %}
+
+{% block css %}
+    <!-- Datatables -->
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    {#    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">#}
+{% endblock %}
+{% block content %}
+
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>上传word
+                <small>...............</small>
+            </h2>
+            <!--右上小按钮-->
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <br/>
+            <form name='upload' method="post" enctype="multipart/form-data" class="form-horizontal form-label-left">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">WORD文件上传：<span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12" required="required">
+                        <input type="file" name="filename">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <input type="submit" value="提交" class="btn btn-success">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>管理试题
+                <small>...............</small>
+            </h2>
+            <!--右上小按钮-->
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+            <div class="table-responsive">
+                <table id="datatable-checkbox" class="table table-striped jambo_table bulk_action">
+                    <thead>
+                    <tr class="headings ">
+                        <th class="column-title">
+                            id
+                        </th>
+                        <th class="column-title">题干</th>
+                        <th class="column-title">难度</th>
+                        <th class="column-title">答案</th>
+                        <th class="column-title">章节</th>
+                        <th class="column-title">知识点</th>
+                        <th class="column-title no-link last"><span class="nobr">操作</span>
+                        </th>
+                        <th class="bulk-actions" colspan="7">
+                            <a class="antoo" style="color:#fff; font-weight:500;">这里怎么删除全部？？？ ( <span
+                                    class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for t in testing %}
+                        <tr class="even pointer">
+                            <td class="a-center ">
+                                {{ t.id }}
+                            </td>
+                            <td class=" ">
+                                {{ t.content|slice:'25' }}...
+                            </td>
+                            <td class=" ">{{ t.difficult }}</td>
+                            <td class=" ">{{ t.answer }} </td>
+                            <td class=" ">第{{ t.chapter.chap_id }}章</td>
+                            <td class=" ">{{ t.knowledge }}</td>
+                            <td class=" last"><a href="{% url 'tea_question_view' t.id %}"
+                                                 class="btn btn-primary btn-xs"><i class="fa fa-folder"></i>
+                                查看
+                            </a>
+                                <a href="{% url 'tea_question_edit' t.id %}" class="btn btn-info btn-xs"><i
+                                        class="fa fa-pencil"></i> 修改
+                                </a>
+                                <a href="{% url 'tea_question_delete' t.id %}" onclick="javascript:return del();"
+                                   class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>
+                                    删除 </a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <!-- Datatables -->
+    <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static  'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+    {#    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>#}
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+    {#    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>#}
+    <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+    {#    <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>#}
+    <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datatable-checkbox').DataTable();
+        });
+    </script>
+    <script>
+        function del() {
+            var msg = "您真的确定要删除吗？\n请确认！";
+            if (confirm(msg) == true) {
+                return true;
+            } else {
+                return false
+                e;
+            }
+        }
+    </script>
+{% endblock %}

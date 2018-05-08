@@ -1,0 +1,64 @@
+{% extends 'teacher/t_base.html' %}
+{% load staticfiles %}
+{% block title %}{{ grade.userid.name }}的成绩{% endblock %}
+
+{% block content %}
+
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>查看成绩
+                <small>...............</small>
+            </h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+
+        </div>
+        <div class="x_content">
+            <h4>姓名：{{ grade.userid.name }}</h4>
+            <h4>学号：{{ grade.userid.username }}</h4>
+            <h4>正确率：{% widthratio grade.accuracy 1 100 %}%</h4>
+            <p>_______________________________________________________________________</p>
+            <h4>错题列表：</h4>
+        </div>
+        <div class="x_content">
+            <!-- start accordion -->
+            <div class="accordion" role="tablist" aria-multiselectable="true">
+                {% for info in error %}
+
+                    <div class="panel">
+                        <a class="panel-heading collapsed" role="tab" id="heading{{ info.id }}" data-toggle="collapse"
+                           data-parent="#accordion" href="#collapse{{ info.id }}" aria-expanded="false"
+                           aria-controls="collapse{{ info.id }}">
+                            <h4 class="panel-title">{{ info.testid.content|slice:"10" }}......</h4>
+                        </a>
+                        <div id="collapse{{ info.id }}" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="heading{{ info.id }}"
+                             aria-expanded="false" style="height: 0px;">
+                            <div class="panel-body">
+                                <p><strong>{{ info.testid.content }}</strong>
+                                </p>
+                                <p>{{ info.testid.A }}</p>
+                                <p>{{ info.testid.B }}</p>
+                                <p>{{ info.testid.C }}</p>
+                                <p>{{ info.testid.D }}</p>
+                                <p>答案：{{ info.testid.answer }}</p>
+                                <strong>错答：{{ info.erroranswer }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            <h5 style="float: right">{{ grade.time }}</h5>
+            </div>
+            <!-- end of accordion -->
+
+
+        </div>
+    </div>
+{% endblock %}
+{

@@ -1,0 +1,65 @@
+{% extends 'student/student_base.html' %}
+{% load staticfiles %}
+{% block title %}试题测试{% endblock %}
+{% block ul %}
+    <li><a href="{% url 's_index' %}"><i class="icon-dashboard"></i><span>我的首页</span> </a>
+    </li>
+    <li class="active"><a href="{% url 'testlist' %}"><i class="icon-list-alt"></i><span>试题练习</span> </a></li>
+    <li><a href="{% url 'gradeslist' %}"><i class="icon-facetime-video"></i><span>我的成绩</span> </a></li>
+    <li><a href="{% url 'filedownload' %}"><i class="icon-bar-chart"></i><span>资料下载</span> </a></li>
+    <li><a href="{% url 'announce' %}"><i class="icon-code"></i><span>查看公告</span> </a></li>
+{% endblock %}
+{% block content %}
+
+    <div class="span12">
+        <div class="widget ">
+            <div class="widget-header"><i class="icon-th-list"></i>
+                <h3>选择章节开始做题</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                <div class="shortcuts">
+                    {% for i in list_chapter %}
+                        <a href="{% url 'testQue2' i.chap_id '0' %}" class="shortcut">
+                            <span class="news-item-day">第{{ i.chap_id }}章</span>
+                            <span class="shortcut-label">{{ i.chap_num }}</span> </a>
+                    {% endfor %}
+
+                </div>
+                <!-- /shortcuts -->
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                           href="#collapse1">
+                            按知识点分类选题
+                        </a>
+                    </div>
+                    <div id="collapse1" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            {% for i in list_chapter %}
+                                {{ i }}
+                            {% endfor %}
+
+                            {#                            {% for i in list_know %}#}
+                            {#                                <a href="{% url 'testQue' i '0' %}">#}
+                            {#                                    <button type="submit" class="btn  btn-success" value="{{ i }}">{{ i }}</button>#}
+                            {#                                </a>#}
+                            {#                            {% endfor %}#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /widget-content -->
+        </div>
+    </div>
+    {#    <div class="span2">#}
+    {#        <div class="widget widget-table action-table">#}
+    {#            <div class="widget-header"><i class="icon-th-list"></i>#}
+    {#                <h3>榜单</h3>#}
+    {#            </div>#}
+    {#            <!-- /widget-header -->#}
+    {#            <div class="widget-content">#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+{% endblock %}

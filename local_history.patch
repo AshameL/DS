@@ -1,0 +1,15 @@
+Index: website/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- website/views.py	(revision )
++++ website/views.py	(revision )
+@@ -56,7 +56,6 @@
+ def tea_annou(request):
+     from website import models
+     announ = models.Announcement.objects.all()
+-   
+     return render(request, 'teacher/t_annou.html', {'announ': announ})
+ 
+ 

@@ -1,0 +1,248 @@
+{% extends 'teacher/t_base.html' %}
+{% load staticfiles %}
+{% block title %}账号管理{% endblock %}
+{% block css %}
+    <!-- Datatables -->
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div id="afterUpload" class="alert ui-pnotify-container alert-danger ui-pnotify-shadow" role="alert"
+             style="min-height: 16px;">
+            <h4 class="ui-pnotify-title">PNotify</h4>
+            <div class="ui-pnotify-text" aria-role="alert">
+                {% for info in re_list %}
+                    <small>【{{ info }}】</small>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>学生账号管理
+                    <small><a href="#myclass"> 点击处理【班级】相关</a></small>
+                </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <form>
+                    <div class="table-responsive">
+                        <table id="datatable-checkbox" class="table table-striped jambo_table bulk_action">
+                            <thead>
+                            <tr class="headings">
+                                <th>
+                                    {# <input type="checkbox" id="check-all" class="flat">#}
+                                </th>
+                                <th class="column-title">用户名学号</th>
+                                <th class="column-title">姓名</th>
+                                <th class="column-title">密码是否重置</th>
+                                <th class="column-title">头像是否重置</th>
+                                <th class="column-title">班级</th>
+                                <th class="column-title">类型</th>
+                                <th class="column-title no-link last"><span class="nobr">操作</span></th>
+                                <th class="bulk-actions" colspan="7">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">
+                                        <button class="btn btn-danger" type="button">全部删除</button>
+                                        ( <span
+                                            class="action-cnt"> </span> )
+
+                                    </a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% csrf_token %}
+                            {% for u in user %}
+                                <tr class="odd pointer">
+                                    <td class="a-center "></td>
+                                    <td class=" ">{{ u.username }}</td>
+                                    <td class=" ">{{ u.name }}</td>
+                                    <td class=" ">
+                                        {# 默认密码：123456#}
+                                        {% if u.password == 'e10adc3949ba59abbe56e057f20f883e' %}
+                                            默认密码
+                                        {% else %}
+                                            否
+                                        {% endif %}
+                                    </td>
+                                    <td class=" ">{% if u.headImage == '//' %}
+                                        默认头像
+                                    {% else %}
+                                        头像自定义#下次改成头像显示
+                                    {% endif %} </td>
+                                    <td class=" ">{{ u.myclass.classname }} </td>
+                                    <td class=" ">
+                                        {% if u.type == 1 %}
+                                            学生
+                                        {% elif u.type == 0 %}
+                                            老师
+                                        {% else %}
+                                            校外人员
+                                        {% endif %}
+                                    </td>
+                                    <td class=" last">
+                                        {% if u.type != 0 %}
+                                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>
+                                                重置密码
+                                            </a>
+                                            <a href="#" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> 重置头像
+                                            </a>
+                                            <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>
+                                                删除 </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>导入学生名单
+                    <small>...............</small>
+                </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br/>
+                <form name='upload' method="post" enctype="multipart/form-data" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">文件上传(限excel文件)：<span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12" required="required">
+                            <input type="file" name="filename">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <input type="submit" value="提交" class="btn btn-success">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="myclass" class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>班级管理
+                    <small>————</small>
+                </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <form>
+                    <div class="table-responsive">
+                        <table id="datatable-checkbox" class="table table-striped jambo_table bulk_action">
+                            <thead>
+                            <tr class="headings">
+                                <th>
+                                    <input type="checkbox" id="check-all" class="flat">
+                                </th>
+                                <th class="column-title">用户名学号</th>
+                                <th class="column-title">姓名</th>
+                                <th class="column-title">密码是否重置</th>
+                                <th class="column-title">头像是否重置</th>
+                                <th class="column-title">班级</th>
+                                <th class="column-title">类型</th>
+                                <th class="column-title no-link last"><span class="nobr">操作</span></th>
+                                <th class="bulk-actions" colspan="7">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">
+                                        <button class="btn btn-danger" type="button">全部删除</button>
+                                        ( <span
+                                            class="action-cnt"> </span> )
+
+                                    </a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% csrf_token %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+    <!-- Datatables -->
+     <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static  'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+    {#    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>#}
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+    {#    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>#}
+    <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+    {#    <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>#}
+    {#    <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>#}
+    <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datatable-checkbox').DataTable();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {//页面加载完之后，自动执行该方法
+            setTimeout(function () {
+                $("#afterUpload").hide();
+            }, 10000);//2秒后执行该方法
+            $("#afterUpload").click(function () {
+                $("#afterUpload").hide();
+            });
+            var re_list =
+            {{ re_list|safe }}
+            if (re_list.length == 0) {
+                $("#afterUpload").hide();
+            }
+            console.log(re_list)
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'student/student_base.html' %}
+{% load staticfiles %}
+{% block title %}XX的主页{% endblock %}
+{% block css %}
+    {#    icheck#}
+    <link href="{% static 'iCheck/skins/flat/blue.css' %}" rel="stylesheet">
+    <link href="{% static 'iCheck/skins/flat/_all.css' %}" rel="stylesheet">
+{% endblock %}
+{% block ul %}
+    <li><a href="{% url 's_index' %}"><i class="icon-dashboard"></i><span>我的首页</span> </a>
+    </li>
+    <li class="active"><a href="{% url 'testlist' %}"><i class="icon-list-alt"></i><span>试题练习</span> </a></li>
+    <li><a href="{% url 'gradeslist' %}"><i class="icon-facetime-video"></i><span>我的成绩</span> </a></li>
+    <li><a href="{% url 'filedownload' %}"><i class="icon-bar-chart"></i><span>资料下载</span> </a></li>
+    <li><a href="{% url 'announce' %}"><i class="icon-code"></i><span>查看公告</span> </a></li>
+{% endblock %}
+{% block content %}
+    <div class="span10">
+        <div class="widget ">
+            <div class="widget-header"><i class="icon-th-list"></i>
+                <h3>第{{ id }} 题</h3>
+                <div class="progress progress-striped active">
+                    <div id="percentage" class="bar" style="width: 40%;"></div>
+                </div>
+            </div>
+            <div class="widget-content">
+                <p></p>
+                <h3>{{ testNow.content|safe }}</h3><br/>
+                <form method="post">
+                    {% csrf_token %}
+                    <h4><input type="radio" name="select" class="iradio_flat-green flat"
+                               value="A">&nbsp;&nbsp;{{ testNow.A|safe }}</h4>
+                    <h4><input type="radio" name="select" class="iradio_flat-green flat"
+                               value="B">&nbsp;&nbsp;{{ testNow.B|safe }}</h4>
+                    <h4 id="C"><input type="radio" name="select" class="iradio_flat-green flat"
+                                      value="C">&nbsp;&nbsp;{{ testNow.C|safe }}</h4>
+                    <h4 id="D"><input type="radio" name="select" class="iradio_flat-green flat"
+                                      value="D">&nbsp;&nbsp;{{ testNow.D|safe }}</h4>
+                    <br>
+                    <input type="button" class="btn btn-success" id="pre" name="previous" value="上一题">
+                    <input type="submit" class="btn btn-primary" name="commit" value="确认">
+                    <input type="button" class="btn btn-success" id='next' name="next" value="下一题">
+                    <br>
+                    <br>
+                    <p id="jiexi">查看解析</p><span id='result'></span>
+                    <br>
+                    <br>
+                    <a href="{% url 'submitgrade' %}" type="button" onclick="javascript:return submintit()"
+                       class="btn btn-success" name="jiaojuan"
+                       style="float: right">交卷</a>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="span2">
+        <div class="widget">
+            <div class="widget-header"><i class="icon-th-list"></i>
+                <h3>试题列表</h3>
+            </div>
+            <div class="widget-content">
+                {% for i in answer %}
+
+                    {% if i == "i" %}
+                        <a href="/testing/{{ chap }}/{{ forloop.counter0 }}" class="btn btn-warning "
+                           type="button">{{ forloop.counter }}</a>
+                    {% else %}
+                        <a href="/testing/{{ chap }}/{{ forloop.counter0 }}" class="btn btn-primary"
+                           type="button" id="NO_{{ forloop.counter0 }}">{{ forloop.counter }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            var t_id ={{ id }};
+            var t_length ={{ length }};
+            var t_ans = "{{ answerNow }}";
+
+            var t_C = "{{ testNow.C }}";
+            var t_D = "{{ testNow.D }}";
+            {# 试题列表展示 #}
+            var thisclass = $("#NO_" + (t_id - 1)).attr("class");
+            $("#NO_" + (t_id - 1)).prop("class", thisclass + " active");
+            {# 隐藏按钮 #}
+            if (t_id <= 1) {
+                $("#pre").hide();
+            }
+
+            if (t_id >= t_length) {
+                $("#next").hide();
+            }
+            if (t_D == 'None') {
+                $("#D").hide()
+            }
+            if (t_C == 'None') {
+                $("#C").hide()
+            }
+            $("#jiexi").click(function () {
+                $('#result').html("答案是：{{ testNow.answer }}")
+            });
+            {# 预选答案#}
+            if (t_ans == "A") {
+                $(":radio:eq(0)").prop("checked", true);
+            }
+            else if (t_ans == "B") {
+                $(":radio:eq(1)").prop("checked", true);
+            }
+            else if (t_ans == "C") {
+                $(":radio:eq(2)").prop("checked", true);
+            }
+            else if (t_ans == "D") {
+                $(":radio:eq(3)").prop("checked", true);
+            }
+            {#        计算百分比#}
+            var t_percentage = (t_id  / t_length) * 100 + "%";
+            console.log(t_percentage)
+            $("#percentage").width ( t_percentage);
+
+
+        });
+        $("#next").click(function () {
+            var t_id = {{ id }};
+            var t_chap = "{{ chap }}";
+            {#            t_id = t_id + 1;#}
+            window.location.href = "/testing/" + t_chap + "/" + t_id;
+
+        });
+        $("#pre").click(function () {
+            var t_id = {{ id }};
+            var t_chap = "{{ chap }}";
+            t_id = t_id - 1 - 1;
+            window.location.href = "/testing/" + t_chap + "/" + t_id;
+        });
+
+    </script>
+    <script>
+        function submintit() {
+            var msg = "您真的确定要交卷吗？\n请确认！";
+            if (confirm(msg) == true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+{% endblock %}

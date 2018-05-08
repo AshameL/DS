@@ -1,0 +1,126 @@
+{% extends 'teacher/t_base.html' %}
+{% load staticfiles %}
+{% block title %}试题修改{% endblock %}
+{% block content %}
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>试题浏览
+                    <small>...............</small>
+                </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <a href="javascript:history.go(-1)" class="btn btn-primary">
+                    <i class="fa fa-mail-reply"></i>后退
+                </a>
+                <br/>
+                {% csrf_token %}
+                <form id="demo-form2" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">题干：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="content" class="form-control col-md-7 col-xs-12" rows="6"
+                            >{{ info.content }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">A：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="A" class="form-control col-md-7 col-xs-12" rows="1"
+                            >{{ info.A }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">B：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="B" class="form-control col-md-7 col-xs-12" rows="1"
+                            >{{ info.B }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">C：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="C" class="form-control col-md-7 col-xs-12" rows="1"
+                            >{{ info.C }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">D：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="D" class="form-control col-md-7 col-xs-12" rows="1"
+                            >{{ info.D }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">答案：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input name="answer" type="text" class="form-control col-md-7 col-xs-12"
+                                   value="{{ info.answer }}">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">章节：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="chapter" class="form-control col-md-7 col-xs-12" rows="1"
+                            >{{ info.chapter }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">知识点：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="knowledge" class="form-control col-md-7 col-xs-12" rows="1"
+                            >{{ info.knowledge }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">难度：</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea name="difficult" class="form-control col-md-7 col-xs-12" rows="1"
+                            >{{ info.difficult }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <input type="submit" onclick="javascript:return del();"
+                               class="btn btn-danger" value="确认修改"/>
+                        <a href="{% url 'tea_question_edit' info.id %}" class="btn btn-info ">重置修改
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+
+    <script>
+        function del() {
+            var msg = "您真的确定要修改吗？\n请确认！";
+            if (confirm(msg) == true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+{% endblock %}

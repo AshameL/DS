@@ -1,0 +1,86 @@
+{% extends 'student/student_base.html' %}
+{% load staticfiles %}
+{% block title %}XX——文件下载{% endblock %}
+{% block ul %}
+    <li><a href="{% url 's_index' %}"><i class="icon-dashboard"></i><span>我的首页</span> </a></li>
+    <li><a href="{% url 'testlist' %}"><i class="icon-list-alt"></i><span>试题练习</span> </a></li>
+    <li><a href="% url 'gradeslist' %}"><i class="icon-facetime-video"></i><span>我的成绩</span> </a></li>
+    <li><a href="{% url 'filedownload' %}"><i class="icon-bar-chart"></i><span>资料下载</span> </a></li>
+    <li class="active"><a href="{% url 'announce' %}"><i class="icon-code"></i><span>查看公告</span> </a></li>
+{% endblock %}
+{% block content %}
+    <div class="span9">
+        <div class="widget widget-nopad">
+            <div class="widget-header"><i class="icon-list-alt"></i>
+                <h3> 最近公告</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                <ul class="news-items">
+                    {% for foo in info %}
+                        <li>
+                            <div class="news-item-date"><span
+                                    class="news-item-day">{{ foo.briefType| slice:"2" }}</span> <span
+                                    class="news-item-month">{{ foo.briefReleaseTime }}</span></div>
+                            <div class="news-item-detail">
+                                <p class="news-item-preview">| </p>
+                                <p class="news-item-preview">| </p>
+                                <p class="news-item-preview">| </p>
+                            </div>
+                            <div class="news-item-preview"><a href="#ann_{{ foo.id }}"
+                                                              data-toggle="tab">{{ foo.briefTitle }}</a>
+                                <p class="news-item-preview"> {{ foo.briefContent }} </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+            <!-- /widget-content -->
+        </div>
+        <!-- /widget -->
+
+    </div>
+    <!-- /span6 -->
+    {#    <div class="x_panel">#}
+    {#        <div class="x_title">#}
+    {#            <h2>查看公告#}
+    {#                <small>……</small>#}
+    {#            </h2>#}
+    {#            <div class="clearfix"></div>#}
+    {#        </div>#}
+    {#        <div class="x_content">#}
+    {#            <div class="col-xs-3">#}
+    {#                <!-- required for floating -->#}
+    {#                <!-- Nav tabs -->#}
+    {#                <ul class="nav nav-tabs tabs-left">#}
+    {#                    {% for foo in info %}#}
+    {#                        <li><a href="#ann_{{ foo.id }}" data-toggle="tab">[{{ foo.briefType }}]{{ foo.briefTitle }}</a>#}
+    {#                        </li>#}
+    {#                    {% endfor %}#}
+    {##}
+    {#                </ul>#}
+    {#            </div>#}
+    {##}
+    {#            <div class="col-xs-9">#}
+    {#                <!-- Tab panes -->#}
+    {#                <div class="tab-content">#}
+    {#                    {% for foo in info %}#}
+    {#                        <div class="tab-pane" id="ann_{{ foo.id }}">#}
+    {#                            <p class="lead ">{{ foo.briefTitle }}</p>#}
+    {#                            <span class="message ">#}
+    {#                          {{ foo.briefReleaseTime }}#}
+    {#                        </span>#}
+    {#                            <b>{{ foo.briefReleaseTime }}</b>#}
+    {#                            <p>{{ foo.briefContent }}</p>#}
+    {##}
+    {#                        </div>#}
+    {#                    {% endfor %}#}
+    {##}
+    {#                </div>#}
+    {#            </div>#}
+    {##}
+    {##}
+    {#        </div>#}
+    {#    </div>#}
+{% endblock %}

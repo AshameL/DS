@@ -1,0 +1,77 @@
+{% extends 'teacher/t_base.html' %}
+{% load staticfiles %}
+{% block title %}修改公告{% endblock %}
+{% block content %}
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>查看成绩
+                <small>...............</small>
+            </h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="x_content">
+                <br/>
+                <form id="demo-form2" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">公告标题： <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ info.briefTitle }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">公告内容：<span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ info.briefContent }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">公告类型：<span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-9 col-xs-12">
+                            {{ info.briefType }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">可见班级
+                            <small>（不选则不限班级）</small>
+                            ：</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p style="padding: 5px;">
+                                {% csrf_token %}
+                                {% for c in classes %}
+                                    <input type="checkbox" name="briefClass" value="{{ c }}"
+                                           data-parsley-multiple="briefClass"
+                                           class="flat"/> {{ c }}
+                                {% endfor %}
+                            </p>
+
+
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button type="submit" class="btn btn-success">修改</button>
+                            <button class="btn btn-warning" type="reset">删除</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

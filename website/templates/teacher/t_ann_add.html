@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加公告</title>
+</head>
+<body>
+{% include 'teacher/t_nav.html' %}
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <p>标题</p>
+    <input type="text" name="briefTitle"><br>
+    <p>内容</p>
+    <textarea name="briefContent" rows="6" cols="50" placeholder="在这里输入公告内容"></textarea><br>
+    <input type="text" name="briefClass" placeholder="班级"><br>
+    <p>类型</p>
+    <select name="briefClass">
+        <option value="">--请选择--</option>
+        <option value="资源">资源公告</option>
+        <option value="作业">作业公告</option>
+        <option value="其他">其他公告</option>
+    </select><br>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>
